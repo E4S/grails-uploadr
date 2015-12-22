@@ -23,10 +23,6 @@ overall it’s a complete package for uploading files using HTML5 as a platform 
 
 [![groovymag](http://www.groovymag.com/images/gm57_400.jpg)](http://www.groovymag.com/main.issues.description/id=59/)
 
-## Build status
-
-![build status](http://jenkins.osx.eu/buildStatus/icon?job=ci-uploadr)
-
 ## Features
 * upload files by
 * * dragging & dropping files onto the uploadr element
@@ -770,31 +766,3 @@ Fixed an issue where some file tags did not always work properly (color, rating,
 
 ###Version 0.5.1
 Implemented support for the changed Firefox 7 File API. While in the previous versions (and in webkit based browsers) the file information was stored in ```file.fileSize``` , ```file.fileName``` and ```file.contentType``` , Firefox 7's File API now uses ```file.name``` , ```file.size``` and ```file.type``` instead. Implemented a fix to support this new behavior.
-
-## Build status
-![build status](http://jenkins.osx.eu/buildStatus/icon?job=ci-uploadr)
-
-## Developed With
-
-[![Intellij](https://dl.dropboxusercontent.com/s/iy2bj9wwcrf3dld/Intellij%20IDEA%20Banner.png?dl=1&token_hash=AAHA0AU2GXH1OHSt_rSfbxXftQgMMmJW8hGOLnCdvK0dJA)](http://www.jetbrains.com/idea/)
-
-[![Grails](http://grails.org/img/grails.png)](http://www.grails.org)
-
-[![jQuery](http://danielpaul.me/projects/share+/images/jquery_logo.png)](http://jquery.com)
-
-
-## License
-
-   Copyright 2011-2014 Jeroen Wesbeek
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
