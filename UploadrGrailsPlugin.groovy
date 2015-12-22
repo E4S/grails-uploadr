@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 class UploadrGrailsPlugin {
-    def version = "1.2"
+    def version = "1.2-SNAPSHOT"
     def grailsVersion = "2.3 > *"
     def loadBefore = ['jquery', 'asset-pipeline', 'sass-asset-pipeline']
 
