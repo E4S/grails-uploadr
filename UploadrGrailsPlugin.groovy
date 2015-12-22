@@ -26,10 +26,10 @@ class UploadrGrailsPlugin {
 	def authorEmail     = "work@osx.eu"
 	def title           = "A HTML5 drag and drop multi-file upload plugin"
 	def description     = "A HTML5 drag and drop multi-file upload plugin"
-	def documentation   = "https://github.com/4np/grails-uploadr/blob/master/README.md"
+	def documentation   = "https://github.com/dustindclark/grails-uploadr/blob/master/README.md"
 	def license         = "APACHE"
-	def issueManagement = [system: "github", url: "https://github.com/4np/grails-uploadr/issues"]
-	def scm             = [url: "https://github.com/4np/grails-uploadr"]
+	def issueManagement = [system: "github", url: "https://github.com/dustindclark/grails-uploadr/issues"]
+	def scm             = [url: "https://github.com/dustindclark/grails-uploadr"]
 
 	// Extra (optional) plugin metadata
 
@@ -37,7 +37,7 @@ class UploadrGrailsPlugin {
     // def organization = [ name: "My Company", url: "http://www.my-company.com/" ]
 
     // Any additional developers beyond the author specified above.
-    // def developers = [ [ name: "Joe Bloggs", email: "joe@bloggs.net" ]]
+    def developers = [ [ name: "Dustin D. Clark", email: "dustin@captivatelabs.com" ]]
 
     def doWithWebDescriptor = { xml ->
         // TODO Implement additions to web.xml (optional), this event occurs before
