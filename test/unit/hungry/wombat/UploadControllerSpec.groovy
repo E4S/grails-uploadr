@@ -54,7 +54,7 @@ class UploadControllerSpec extends Specification {
 
     void "test delete"() {
         when:
-        session.uploadr= getUploadrInfo()
+        session.uploadr = getUploadrInfo()
         request.addHeader("X-Uploadr-Name", "uploadr")
         request.addHeader('X-File-Name', 'unit-test.txt')
 
