@@ -42,7 +42,6 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
-        test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
     }
 
     plugins {
@@ -53,18 +52,18 @@ grails.project.dependency.resolution = {
         }
 
         // when running the plugin
-        provided(":tomcat:7.0.55",
-                ":jquery:1.11.1",
-                ':cache:1.1.8'
+        provided("org.grails.plugins:tomcat:8.0.22",
+                "org.grails.plugins:jquery:1.11.1",
+                "org.grails.plugins:cache:1.1.8",
+                "org.grails.plugins:sass-asset-pipeline:2.6.7"
         ) {
             // this is a plugin only plugin, should not be transitive to the application
             export = false
         }
 
         // dependencies
-        compile(":asset-pipeline:2.2.3",
-                ":sass-asset-pipeline:2.1.1") {
-            export = true
+        compile("org.grails.plugins:asset-pipeline:2.6.10") {
+            export = false
         }
     }
 }
