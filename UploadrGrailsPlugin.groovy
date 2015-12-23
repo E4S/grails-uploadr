@@ -18,7 +18,6 @@ class UploadrGrailsPlugin {
     def version = "1.2-SNAPSHOT"
     def grailsVersion = "2.3 > *"
     def loadBefore = ['jquery', 'asset-pipeline', 'sass-asset-pipeline']
-
     def dependsOn = [jquery: '1.0 > *', assetPipeline: "1.0 > *", sassAssetPipeline: "1.0.0 > *"]
     def author = "Jeroen Wesbeek"
     def authorEmail = "work@osx.eu"
@@ -28,43 +27,6 @@ class UploadrGrailsPlugin {
     def license = "APACHE"
     def issueManagement = [system: "github", url: "https://github.com/dustindclark/grails-uploadr/issues"]
     def scm = [url: "https://github.com/dustindclark/grails-uploadr"]
-
-    // Extra (optional) plugin metadata
-
-    // Details of company behind the plugin (if there is one)
-    // def organization = [ name: "My Company", url: "http://www.my-company.com/" ]
-
-    // Any additional developers beyond the author specified above.
+    def organization = [name: "Captivate Labs, Inc", url: "http://www.captivatelabs.com/"]
     def developers = [[name: "Dustin D. Clark", email: "dustin@captivatelabs.com"]]
-
-    def doWithWebDescriptor = { xml ->
-        // TODO Implement additions to web.xml (optional), this event occurs before
-    }
-
-    def doWithSpring = {
-        // TODO Implement runtime spring config (optional)
-    }
-
-    def doWithDynamicMethods = { ctx ->
-        // TODO Implement registering dynamic methods to classes (optional)
-    }
-
-    def doWithApplicationContext = { applicationContext ->
-        // TODO Implement post initialization spring config (optional)
-    }
-
-    def onChange = { event ->
-        // TODO Implement code that is executed when any artefact that this plugin is
-        // watching is modified and reloaded. The event contains: event.source,
-        // event.application, event.manager, event.ctx, and event.plugin.
-    }
-
-    def onConfigChange = { event ->
-        // TODO Implement code that is executed when the project configuration changes.
-        // The event is the same as for 'onChange'.
-    }
-
-    def onShutdown = { event ->
-        // TODO Implement code that is executed when the application shuts down (optional)
-    }
 }
