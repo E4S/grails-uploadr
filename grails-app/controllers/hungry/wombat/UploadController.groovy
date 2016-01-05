@@ -18,38 +18,34 @@ package hungry.wombat
 
 import grails.converters.JSON
 
-class UploadController {
-    static final int BUFF_SIZE = 100000;
-    static final byte[] buffer = new byte[BUFF_SIZE];
+import org.springframework.util.FileCopyUtils
 
-    def index = {
+class UploadController {
+
+    def index() {
         redirect(uri: "/")
     }
 
-    def warning = {
+    def warning() {
         render(plugin: 'uploadr', template: '/upload/warning')
     }
 
-    def handle = {
-        def contentType = request.getHeader("Content-Type") as String
-        def fileName = URLDecoder.decode(request.getHeader('X-File-Name'), 'UTF-8') as String
-        def fileSize = (request.getHeader('X-File-Size') != "undefined") ? request.getHeader('X-File-Size') as Long : 0L
-        def name = URLDecoder.decode(request.getHeader('X-Uploadr-Name'), 'UTF-8') as String
+    def handle() {
+        String contentType = request.getHeader("Content-Type")
+        String fileName = URLDecoder.decode(request.getHeader('X-File-Name'), 'UTF-8')
+        long fileSize = (request.getHeader('X-File-Size') != "undefined") ? request.getHeader('X-File-Size') as long : 0
+        String name = URLDecoder.decode(request.getHeader('X-Uploadr-Name'), 'UTF-8')
         def info = session.getAttribute('uploadr')
-        def myInfo = (name && info && info.containsKey(name)) ? info.get(name) : [:]
-        def model = (myInfo.containsKey('model')) ? myInfo.get('model') : [:] // unused, demonstration purposes only
-        def savePath = ((myInfo.containsKey('path')) ? myInfo.get('path') : "/tmp") as String
+        def myInfo = (name && info && info.containsKey(name)) ? info[name] : [:]
+        String savePath = myInfo.path ?: "/tmp"
         def dir = new File(savePath)
         def file = new File(savePath, fileName)
-        int dot = 0
         def namePart = ""
         def extension = ""
         def testName = ""
-        def testIterator = 1
         int status = 0
         def statusText = ""
 
-        // set response content type to json
         response.contentType = 'application/json'
 
         // update lastUsed stamp in session
@@ -58,30 +54,24 @@ class UploadController {
             session.uploadr[name].lastAction = "upload"
         }
 
-        // does the path exist?
         if (!dir.exists()) {
-            // attempt to create the path
             try {
                 dir.mkdirs()
-            } catch (Exception e) {
+            } catch (e) {
                 response.sendError(500, "could not create upload path ${savePath}")
                 render([written: false, fileName: file.name] as JSON)
                 return false
             }
         }
 
-        // do we have enough space available for this upload?
         def freeSpace = dir.getUsableSpace()
         if (fileSize > freeSpace) {
-            // not enough free space
             response.sendError(500, "cannot store '${fileName}' (${fileSize} bytes), only ${freeSpace} bytes of free space left on device")
             render([written: false, fileName: file.name] as JSON)
             return false
         }
 
-        // is the file writable?
         if (!dir.canWrite()) {
-            // no, try to make it writable
             if (!dir.setWritable(true)) {
                 response.sendError(500, "'${savePath}' is not writable, and unable to change rights")
                 render([written: false, fileName: file.name] as JSON)
@@ -90,44 +80,24 @@ class UploadController {
         }
 
         // make sure the file name is unique
-        dot = fileName.lastIndexOf(".")
+        int dot = fileName.lastIndexOf(".")
         namePart = (dot) ? fileName[0..dot - 1] : fileName
         extension = (dot) ? fileName[dot + 1..fileName.length() - 1] : ""
+        int testIterator = 1
         while (file.exists()) {
             testName = "${namePart}-${testIterator}.${extension}"
             file = new File(savePath, testName)
             testIterator++
         }
 
-        // define input and output streams
-        InputStream inStream = null
-        OutputStream outStream = null
-
         // handle file upload
         try {
-            inStream = request.getInputStream()
-            outStream = new FileOutputStream(file)
-
-            while (true) {
-                synchronized (buffer) {
-                    int amountRead = inStream.read(buffer);
-                    if (amountRead == -1) {
-                        break
-                    }
-                    outStream.write(buffer, 0, amountRead)
-                }
-            }
-            outStream.flush()
-
+            FileCopyUtils.copy(request.inputStream, new FileOutputStream(file))
             status = 200
             statusText = "'${file.name}' upload successful!"
-        } catch (Exception e) {
-            // whoops, looks like something went wrong
+        } catch (e) {
             status = 500
-            statusText = e.getMessage()
-        } finally {
-            if (inStream != null) inStream.close()
-            if (outStream != null) outStream.close()
+            statusText = e.message
         }
 
         // make sure the file was properly written
@@ -142,7 +112,7 @@ class UploadController {
             // then -try to- delete the file
             try {
                 file.delete()
-            } catch (Exception e) {
+            } catch (ignored) {
             }
         }
 
@@ -151,7 +121,7 @@ class UploadController {
         render([written: (status == 200), fileName: file.name, status: status, statusText: statusText] as JSON)
     }
 
-    def delete = {
+    def delete() {
         def fileName = URLDecoder.decode(request.getHeader('X-File-Name'), 'UTF-8')
         def name = URLDecoder.decode(request.getHeader('X-Uploadr-Name'), 'UTF-8')
         def info = session.getAttribute('uploadr')
@@ -170,7 +140,7 @@ class UploadController {
                 file.delete()
 
                 response.sendError(200, "OK, deleted '${fileName}'")
-            } catch (Exception e) {
+            } catch (e) {
                 response.sendError(500, "could not delete '${fileName}' (${e.getMessage()}")
             }
         } else {
@@ -178,7 +148,7 @@ class UploadController {
         }
     }
 
-    def download = {
+    def download() {
         def fileName = URLDecoder.decode(params.get('file'), 'UTF-8')
         def name = URLDecoder.decode(params.get('uploadr'), 'UTF-8')
         def info = session.getAttribute('uploadr')
@@ -205,33 +175,13 @@ class UploadController {
             // @see http://greenbytes.de/tech/tc2231/
             response.setHeader("Content-Disposition", "attachment; filename=${URLEncoder.encode(fileName, 'ISO-8859-1')}; filename*= UTF-8''${URLEncoder.encode(fileName, 'UTF-8')}")
 
-            // define input and output streams
-            InputStream inStream = null
-            OutputStream outStream = null
-
             // handle file upload
             try {
-                inStream = new FileInputStream(file)
-                outStream = response.getOutputStream()
-
-                while (true) {
-                    synchronized (buffer) {
-                        int amountRead = inStream.read(buffer);
-                        if (amountRead == -1) {
-                            break
-                        }
-                        outStream.write(buffer, 0, amountRead)
-                    }
-                    outStream.flush()
-                }
-            } catch (Exception e) {
-                // whoops, looks like something went wrong
-                log.error "download failed! ${e.getMessage()}"
-            } finally {
-                if (inStream != null) inStream.close()
-                if (outStream != null) outStream.close()
+                FileCopyUtils.copy(new FileInputStream(file), response.outputStream)
+            } catch (e) {
+                log.error "download failed! $e.message"
             }
-        } else if (file && file.exists() && !file.canRead()) {
+        } else if (file?.exists() && !file.canRead()) {
             // file not readable
             response.sendError(400, "could not download '${fileName}': access denied")
             return false

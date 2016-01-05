@@ -30,42 +30,45 @@ class UploadrTagLib {
      * @param Closure body
      */
     def add = { attrs, body ->
-        def uri
-        def sound = !(attrs.containsKey('noSound') && attrs.get('noSound').toString().toBoolean())
-        def name = (attrs.containsKey('name') ? attrs.get('name') : UUID.randomUUID())
-        def classname = (attrs.containsKey('class') ? attrs.get('class') : 'uploadr')
-        def direction = (attrs.containsKey('direction') ? attrs.get('direction') : 'down')
-        def placeholder = (attrs.containsKey('placeholder') ? attrs.get('placeholder') : '')
-        def fileselect = (attrs.containsKey('fileselect') ? attrs.get('fileselect') : '')
-        def maxVisible = (attrs.containsKey('maxVisible') ? attrs.get('maxVisible') : 0)
-        def rating = (attrs.containsKey('rating') ? attrs.get('rating').toString().toBoolean() : false)
-        def voting = (attrs.containsKey('voting') ? attrs.get('voting').toString().toBoolean() : false)
-        def colorPicker = (attrs.containsKey('colorPicker') ? attrs.get('colorPicker').toString().toBoolean() : false)
-        def maxSize = (attrs.containsKey('maxSize') ? attrs.get('maxSize') as Integer : 0)
-        def deletable = (attrs.containsKey('deletable') ? attrs.get('deletable').toString().toBoolean() : true)
-        def viewable = (attrs.containsKey('viewable') ? attrs.get('viewable').toString().toBoolean() : true)
-        def downloadable = (attrs.containsKey('downloadable') ? attrs.get('downloadable').toString().toBoolean() : true)
-        def allowedExtensions = (attrs.containsKey('allowedExtensions') ? attrs.get('allowedExtensions').toString().toLowerCase() : "")
-        def model = (attrs.containsKey('model') ? attrs.get('model') : [:])
-        def maxConcurrentUploads = (attrs.containsKey('maxConcurrentUploads') ? attrs.get('maxConcurrentUploads').toString().toInteger() : 0)
-        def maxConcurrentUploadsMethod = (attrs.containsKey('maxConcurrentUploadsMethod') ? attrs.get('maxConcurrentUploadsMethod').toString() : 'pause')
+        def booleanAttr = { String name, boolean defaultIfMissing ->
+            attrs.containsKey(name) ? attrs[name].toString().toBoolean() : defaultIfMissing
+        }
+        boolean sound = !(attrs.containsKey('noSound') && attrs.noSound.toString().toBoolean())
+        String name = attrs.name ?: UUID.randomUUID()
+        String classname = attrs.get('class') ?: 'uploadr'
+        String direction = attrs.direction ?: 'down'
+        String placeholder = attrs.placeholder ?: ''
+        String fileselect = attrs.fileselect ?: ''
+        def maxVisible = attrs.maxVisible ?: 0
+        boolean rating = booleanAttr('rating', false)
+        boolean voting = booleanAttr('voting', false)
+        boolean colorPicker = booleanAttr('colorPicker', false)
+        int maxSize = (attrs.maxSize ?: 0) as int
+        boolean deletable = booleanAttr('deletable', true)
+        boolean viewable = booleanAttr('viewable', true)
+        boolean downloadable = booleanAttr('downloadable', true)
+        String allowedExtensions = (attrs.allowedExtensions ?: '').toString().toLowerCase()
+        Map model = attrs.model ?: [:]
+        int maxConcurrentUploads = (attrs.containsKey('maxConcurrentUploads') ? attrs.maxConcurrentUploads.toString() as int : 0)
+        String maxConcurrentUploadsMethod = attrs.maxConcurrentUploadsMethod ?: 'pause'
 
         // define uri
-        if (attrs.get('controller')) {
+        def uri
+        if (attrs.controller) {
             // get parameters if any to pass to the custom controller/action
-            def params = attrs.containsKey('params') ? attrs.get('params') : []
+            def params = attrs.params ?: []
 
             // got an action attribute?
-            if (attrs.get('action')) {
+            if (attrs.action) {
                 // got a plugin attribute?
-                if (attrs.get('plugin')) {
+                if (attrs.plugin) {
                     uri = createLink(plugin: attrs.plugin, controller: attrs.controller, action: attrs.action, params: params)
                 } else {
                     uri = createLink(controller: attrs.controller, action: attrs.action, params: params)
                 }
             } else {
                 // got a plugin attribute?
-                if (attrs.get('plugin')) {
+                if (attrs.plugin) {
                     uri = createLink(plugin: attrs.plugin, controller: attrs.controller, params: params)
                 } else {
                     uri = createLink(controller: attrs.controller, params: params)
@@ -77,7 +80,7 @@ class UploadrTagLib {
         }
 
         // got a path attribute?
-        if (attrs.get('path')) {
+        if (attrs.path) {
             // initialize session if necessary
             if (!session.uploadr) session.uploadr = [:]
 
@@ -112,7 +115,7 @@ class UploadrTagLib {
         body()
 
         // render file upload div
-        out << "<div name=\"${name}\" class=\"${classname}\"></div>"
+        out << """<div name="${name}" class="${classname}"></div>"""
 
         // and render inline initialization javascript
 //        asset.script(assetScriptBlocks: g.render(
@@ -143,13 +146,13 @@ class UploadrTagLib {
                         allowedExtensions         : allowedExtensions,
                         maxConcurrentUploads      : maxConcurrentUploads,
                         maxConcurrentUploadsMethod: maxConcurrentUploadsMethod,
-                        unsupported               : (attrs.get('unsupported')) ? attrs.unsupported : createLink(plugin: 'uploadr', controller: 'upload', action: 'warning')
+                        unsupported               : attrs.unsupported ?: createLink(plugin: 'uploadr', controller: 'upload', action: 'warning')
                 ]
         )
         out << "</script>"
     }
 
-    def demo = { attrs, body ->
+    def demo = { attrs ->
         out << g.render(plugin: 'uploadr', template: '/upload/demo')
     }
 
@@ -198,7 +201,7 @@ class UploadrTagLib {
     }
 
     def file = { attrs, body ->
-        if (!attrs.get('name')) return
+        if (!attrs.name) return
 
         // use child tags to insert file
         pageScope.temp = [
@@ -225,7 +228,7 @@ class UploadrTagLib {
                         modified: file.lastModified()
                 ]
             } else {
-                log.error "ignoring predefined file '${file}' as it does not exist!"
+                log.error "ignoring predefined file '$file' as it does not exist!"
             }
         } else {
             pageScope.files[pageScope.files.size()] = pageScope.temp
@@ -271,8 +274,8 @@ class UploadrTagLib {
         String bodyString = body()
         def rating = bodyString as double
 
-        if (rating < 0) rating = 0;
-        if (rating > 1) rating = 1;
+        if (rating < 0) rating = 0
+        if (rating > 1) rating = 1
 
         pageScope.temp.rating = rating
 
@@ -286,7 +289,7 @@ class UploadrTagLib {
     }
 
     def deletable = { attrs, body ->
-        pageScope.temp.deletable = ((body() as String).toLowerCase().trim() == "true") ? true : false
+        pageScope.temp.deletable = (body() as String).toLowerCase().trim() == "true"
 
         out << "deletable"
     }

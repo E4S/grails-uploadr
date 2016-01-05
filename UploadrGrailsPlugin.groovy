@@ -18,7 +18,6 @@ class UploadrGrailsPlugin {
     def version = "1.2-SNAPSHOT"
     def grailsVersion = "2.3 > *"
     def loadBefore = ['jquery', 'asset-pipeline', 'sass-asset-pipeline']
-    def dependsOn = [jquery: '1.0 > *', assetPipeline: "1.0 > *", sassAssetPipeline: "1.0.0 > *"]
     def author = "Jeroen Wesbeek"
     def authorEmail = "work@osx.eu"
     def title = "HTML5 drag and drop multi-file upload plugin"
