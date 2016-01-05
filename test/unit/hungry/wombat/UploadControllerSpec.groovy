@@ -13,12 +13,6 @@ class UploadControllerSpec extends Specification {
         return ['uploadr': ['path': "${System.getProperty("java.io.tmpdir")}/uploadr"]]
     }
 
-    def setup() {
-    }
-
-    def cleanup() {
-    }
-
     void "test upload"() {
         when:
         session.uploadr = getUploadrInfo()
