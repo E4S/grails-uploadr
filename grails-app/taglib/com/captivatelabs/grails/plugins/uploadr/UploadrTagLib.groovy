@@ -18,7 +18,7 @@ class UploadrTagLib {
         }
         boolean sound = !(attrs.containsKey('noSound') && attrs.noSound.toString().toBoolean())
         String name = attrs.name ?: UUID.randomUUID()
-        String classname = attrs.get('class') ?: 'uploadr'
+        String classname = attrs.get('class') ?: 'grails-uploadr'
         String direction = attrs.direction ?: 'down'
         String placeholder = attrs.placeholder ?: ''
         String fileselect = attrs.fileselect ?: ''
@@ -59,7 +59,7 @@ class UploadrTagLib {
             }
         } else {
             // use default controller for handling file uploads
-            uri = createLink(plugin: 'uploadr', controller: 'upload', action: 'handle')
+            uri = createLink(plugin: 'grails-uploadr', controller: 'upload', action: 'handle')
         }
 
         // got a path attribute?
@@ -106,7 +106,7 @@ class UploadrTagLib {
 //		out << r.script([:], g.render(
         out << "<script>"
         out << g.render(
-                plugin: 'uploadr',
+                plugin: 'grails-uploadr',
                 template: '/js/init',
                 model: [
                         name                      : name,
@@ -129,14 +129,14 @@ class UploadrTagLib {
                         allowedExtensions         : allowedExtensions,
                         maxConcurrentUploads      : maxConcurrentUploads,
                         maxConcurrentUploadsMethod: maxConcurrentUploadsMethod,
-                        unsupported               : attrs.unsupported ?: createLink(plugin: 'uploadr', controller: 'upload', action: 'warning')
+                        unsupported               : attrs.unsupported ?: createLink(plugin: 'grails-uploadr', controller: 'upload', action: 'warning')
                 ]
         )
         out << "</script>"
     }
 
     def demo = { attrs ->
-        out << g.render(plugin: 'uploadr', template: '/upload/demo')
+        out << g.render(plugin: 'grails-uploadr', template: '/upload/demo')
     }
 
     def onStart = { attrs, body ->
