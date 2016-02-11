@@ -1,6 +1,8 @@
+package com.captivatelabs.grails.plugins.uploadr
+
 /**
  *  Uploadr, a multi-file uploader plugin
- *  Copyright (C) 2011 Jeroen Wesbeek
+ *  Copyright (C) 2016 Captivate Labs, Inc
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.

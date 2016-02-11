@@ -1,22 +1,6 @@
 <%@page import="org.apache.commons.lang.RandomStringUtils" %>
 <%@page expressionCodec="raw" %>
 <%
-/**
- *  Uploadr, a multi-file uploader plugin
- *  Copyright (C) 2011 Jeroen Wesbeek
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
 
 // Note that normally you should pass these variables to your view from your
 // controller, as in MVC your controller should never contain business logic
@@ -435,6 +419,6 @@ def path5 = new File("${downloads}/myFifthUploadr")
 	<hr>
 
 	<footer>
-		<p>&copy; Jeroen Wesbeek 2011-${new Date().format("yyyy")} </p>
+		<p>&copy; ${new Date().format("yyyy")} - Captivate Labs, Inc.</p>
 	</footer>
 </div>

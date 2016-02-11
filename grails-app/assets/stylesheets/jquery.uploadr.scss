@@ -34,12 +34,12 @@
     }
 
     input {
-      KHTMLOpacity:0;
-      MozOpacity:0;
-      -khtml-opacity:0;
-      -ms-filter:"alpha(opacity=0)";
-      -moz-opacity:0;
-      opacity:0;
+      KHTMLOpacity: 0;
+      MozOpacity: 0;
+      -khtml-opacity: 0;
+      -ms-filter: "alpha(opacity=0)";
+      -moz-opacity: 0;
+      opacity: 0;
       width: 10px;
     }
   }
@@ -111,7 +111,7 @@
         margin-top: -40px;
         vertical-align: middle;
         margin-left: 5px;
-        font-family: Arial,'Helvetica Neue',Helvetica,sans-serif;
+        font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
 
         .spinner {
           background-image: url(../images/importing.gif);
@@ -121,7 +121,7 @@
           background-position: center;
           display: inline-block;
           margin-top: 15px;
-          float:right;
+          float: right;
         }
 
         .controls {
@@ -313,7 +313,7 @@
         display: inline-block;
         width: 10px;
         list-style: none;
-        font-family: Arial,'Helvetica Neue',Helvetica,sans-serif;
+        font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
         font-size: 10px;
         text-shadow: 0 1px 1px rgba(255, 255, 255, 0.33);
         letter-spacing: -2px;
@@ -342,7 +342,7 @@
       height: 0;
       border-top: 10px solid transparent;
       border-bottom: 10px solid transparent;
-      border-right:10px solid #000;
+      border-right: 10px solid #000;
       z-index: 12;
     }
 
@@ -359,7 +359,7 @@
       z-index: 11;
 
       ul {
-        list-style-type:none;
+        list-style-type: none;
         padding: 0px;
         margin: 5px 0px 0px 4px;
 

@@ -1,4 +1,4 @@
-package hungry.wombat
+package com.captivatelabs.grails.plugins.uploadr
 
 import grails.test.mixin.TestFor
 import org.springframework.http.HttpStatus

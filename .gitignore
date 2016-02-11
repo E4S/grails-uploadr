@@ -8,3 +8,7 @@ out
 .idea
 *.iml
 *.zip
+/build
+/.sass-cache
+/.jruby-container
+.asscache
